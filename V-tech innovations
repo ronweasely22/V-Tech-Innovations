@@ -1,0 +1,38 @@
+            <button onclick="submitSuggestion(${idea.id})">Submit Suggestion</button>
+        </div>
+        <div id="suggestionsContainer">
+            <h3>Suggestions</h3>
+            <ul>
+                ${idea.suggestions.map(s => `<li>${s}</li>`).join('')}
+            </ul>
+        </div>
+        <button onclick="renderIdeas()">Back to Ideas</button>
+    `;
+}
+
+function submitSuggestion(ideaId) {
+    const suggestionInput = document.getElementById('suggestionInput');
+    const suggestion = suggestionInput.value.trim();
+    if (suggestion) {
+        const idea = ideas.find(i => i.id === ideaId);
+        idea.suggestions.push(suggestion);
+        saveIdeas();
+        viewIdeaDetails(ideaId);
+    }
+}
+
+function deleteIdea(ideaId) {
+    if (confirm('Are you sure you want to delete this idea?')) {
+        ideas = ideas.filter(i => i.id !== ideaId);
+        saveIdeas();
+        renderIdeas();
+    }
+}
+
+function scrollToIdeas() {
+    renderIdeas();
+    document.getElementById('ideasContainer').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Initialize the page with stored ideas
+renderIdeas();
